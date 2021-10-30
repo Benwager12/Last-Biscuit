@@ -24,12 +24,13 @@ public class LastBiscuit {
             System.out.println("Player Turn: " + playerTurn);
 
             System.out.print("Choose a barrel: barrel1 (one), barrel2 (two), or both (both), or skip turn (skip)? ");
-            // TODO: Check if it is one of these values.
+
             String selectedBarrel = in.nextLine();
 
             if (selectedBarrel.equalsIgnoreCase("skip")) {
                 if (hasSkip.get(playerTurn)) {
                     playerTurn = switchPlayer(playerTurn);
+                    hasSkip.put(playerTurn, false);
                     continue;
                 }
 
