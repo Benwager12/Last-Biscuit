@@ -29,11 +29,7 @@ public class LastBiscuit {
 
             if (selectedBarrel.equalsIgnoreCase("skip")) {
                 if (hasSkip.get(playerTurn)) {
-                    if (playerTurn == 1) {
-                        playerTurn = 2;
-                    } else {
-                        playerTurn = 1;
-                    }
+                    playerTurn = switchPlayer(playerTurn);
                     continue;
                 }
 
@@ -49,17 +45,10 @@ public class LastBiscuit {
 
             if (selectedBarrel.equalsIgnoreCase("two") ||
                     selectedBarrel.equalsIgnoreCase("both")) {
-                barrelOne -= biscuitAmount;
+                barrelTwo -= biscuitAmount;
             }
-
-            if (playerTurn == 1) {
-                playerTurn = 2;
-            } else {
-                playerTurn = 1;
-            }
+            playerTurn = switchPlayer(playerTurn);
         }
-
-        // askIntegerQuestion("test", in);
     }
 
     public static int askIntegerQuestion(String question, Scanner in) {
@@ -96,6 +85,17 @@ public class LastBiscuit {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    public static int switchPlayer(int player) {
+        switch (player) {
+            case 1:
+                return 2;
+            case 2:
+                return 1;
+            default:
+                return 0;
         }
     }
 }
