@@ -24,8 +24,11 @@ public class LastBiscuit {
             System.out.println("Player Turn: " + playerTurn);
 
             System.out.print("Choose a barrel: barrel1 (one), barrel2 (two), or both (both), or skip turn (skip)? ");
-
             String selectedBarrel = in.nextLine();
+
+            if (!isOption(selectedBarrel)) {
+                continue;
+            }
 
             if (selectedBarrel.equalsIgnoreCase("skip")) {
                 if (hasSkip.get(playerTurn)) {
@@ -33,11 +36,12 @@ public class LastBiscuit {
                     hasSkip.put(playerTurn, false);
                     continue;
                 }
-
                 // no skip message
+                continue;
             }
 
             int biscuitAmount = askIntegerQuestion("How many biscuits are you taking?", in);
+
 
             if (selectedBarrel.equalsIgnoreCase("one") ||
                     selectedBarrel.equalsIgnoreCase("both")) {
@@ -98,5 +102,16 @@ public class LastBiscuit {
             default:
                 return 0;
         }
+    }
+
+    public static boolean isOption(String selectedOption) {
+        String[] options = "one,two,both,skip".split(",");
+
+        for (String op : options) {
+            if (selectedOption.equalsIgnoreCase(op)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
