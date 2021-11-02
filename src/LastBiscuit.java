@@ -7,6 +7,7 @@ public class LastBiscuit {
         final String OUTPUT_BARRELS_STRING = "Biscuits Left - Barrel 1: %d%n"
                 + "Biscuits Left - Barrel 2: %d%n";
         final String PLAYER_TURN_STRING = "Player Turn: %d%n";
+        final String BISCUITS_TAKING = "How many biscuits are you taking? ";
 
         Scanner in = new Scanner(System.in);
 
@@ -62,28 +63,24 @@ public class LastBiscuit {
             int biscuitAmount = 0;
             boolean foundBiscuitAmount = false;
 
+            int printType = 0;
             do {
-                System.out.print("How many biscuits are you taking? ");
+                System.out.print(printType == 0 ?
+                        BISCUITS_TAKING : "Please input an integer: ");
 
                 String strBiscuitAmount = in.nextLine();
                 if (!isNumeric(strBiscuitAmount)) {
-                    System.out.println("Please enter an integer");
+                    printType = 1;
                     continue;
                 }
 
                 biscuitAmount = Integer.parseInt(strBiscuitAmount);
-                foundBiscuitAmount = biscuitAmount > 0;
 
-                if ((isOne || isBoth) && barrelOne - biscuitAmount < 0) {
-                    biscuitAmount = 0;
-                }
-
-                if ((isTwo || isBoth) && barrelTwo - biscuitAmount < 0) {
-                    biscuitAmount = 0;
-                }
-
+                foundBiscuitAmount = biscuitAmount > 0 && (!(((isOne || isBoth) && barrelOne - biscuitAmount < 0)
+                        || ((isTwo || isBoth) && barrelTwo - biscuitAmount < 0)));
 
                 if (!foundBiscuitAmount) {
+                    printType = 0;
                     System.out.println("Sorry, that's not a legal number of "
                             + "biscuits for that/those barrel(s)");
                 }
@@ -104,10 +101,12 @@ public class LastBiscuit {
                 System.out.printf(PLAYER_TURN_STRING, playerTurn);
             }
         }
-
         System.out.println("Winner is player " + playerTurn);
     }
 
+    // you give 1, you get 2
+    // you give 2, you get 1
+    // playerTurn = switchPlayer(playerTurn);
     public static int switchPlayer(int player) {
         switch (player) {
             case 1:
@@ -120,10 +119,12 @@ public class LastBiscuit {
     }
 
     public static boolean isNumeric(String str) {
+        boolean isFirst = true;
         for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c)) {
+            if (!Character.isDigit(c) && (!(isFirst && str.equalsIgnoreCase("-")))) {
                 return false;
             }
+            isFirst = false;
         }
         return true;
     }
