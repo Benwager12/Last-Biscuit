@@ -36,8 +36,9 @@ public class LastBiscuit {
             String selectedBarrel = "";
             while (isNotOption(selectedBarrel)) {
                 System.out.print("Choose a barrel: barrel1 (one), barrel2 (two), "
-                        + "or both (both), or skip turn (skip)? ");
+                            + "or both (both), or skip turn (skip)? ");
                 selectedBarrel = in.nextLine();
+
             }
 
             if (selectedBarrel.equalsIgnoreCase("skip")) {
@@ -59,19 +60,19 @@ public class LastBiscuit {
             isBoth = selectedBarrel.equalsIgnoreCase("both");
 
             int biscuitAmount = 0;
-            boolean done = false;
+            boolean foundBiscuitAmount = false;
 
             do {
                 System.out.print("How many biscuits are you taking? ");
 
-                if (!in.hasNextInt()) {
+                String strBiscuitAmount = in.nextLine();
+                if (!isNumeric(strBiscuitAmount)) {
                     System.out.println("Please enter an integer");
-                    in.nextLine();
                     continue;
                 }
 
-                biscuitAmount = in.nextInt();
-                done = biscuitAmount > 0;
+                biscuitAmount = Integer.parseInt(strBiscuitAmount);
+                foundBiscuitAmount = biscuitAmount > 0;
 
                 if ((isOne || isBoth) && barrelOne - biscuitAmount < 0) {
                     biscuitAmount = 0;
@@ -82,11 +83,11 @@ public class LastBiscuit {
                 }
 
 
-                if (!done) {
+                if (!foundBiscuitAmount) {
                     System.out.println("Sorry, that's not a legal number of "
                             + "biscuits for that/those barrel(s)");
                 }
-            } while (!done);
+            } while (!foundBiscuitAmount);
 
             if (isOne || isBoth) {
                 barrelOne -= biscuitAmount;
@@ -108,11 +109,23 @@ public class LastBiscuit {
     }
 
     public static int switchPlayer(int player) {
-        return switch (player) {
-            case 1 -> 2;
-            case 2 -> 1;
-            default -> 0;
-        };
+        switch (player) {
+            case 1:
+                return 2;
+            case 2:
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
+    public static boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isNotOption(String selectedOption) {
