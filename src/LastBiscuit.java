@@ -59,8 +59,27 @@ public class LastBiscuit {
             isBoth = selectedBarrel.equalsIgnoreCase("both");
 
             int biscuitAmount = 0;
-            while (biscuitAmount < 1) {
-                biscuitAmount = askIntegerQuestion("How many biscuits are you taking?", in);
+
+            boolean isNotNumber;
+            boolean done = false;
+
+            do {
+                isNotNumber = false;
+                System.out.print("How many biscuits are you taking? ");
+
+                while (!in.hasNextInt()) {
+                    System.out.println("Please enter an integer");
+                    in.nextLine();
+                    isNotNumber = true;
+                    break;
+                }
+
+                if (isNotNumber) {
+                    continue;
+                } else {
+                    biscuitAmount = in.nextInt();
+                    done = biscuitAmount > 0;
+                }
 
                 if ((isOne || isBoth) && barrelOne - biscuitAmount < 0) {
                     biscuitAmount = 0;
@@ -70,11 +89,12 @@ public class LastBiscuit {
                     biscuitAmount = 0;
                 }
 
-                if (biscuitAmount < 1) {
+
+                if (!done) {
                     System.out.println("Sorry, that's not a legal number of "
                             + "biscuits for that/those barrel(s)");
                 }
-            }
+            } while (!done);
 
             if (isOne || isBoth) {
                 barrelOne -= biscuitAmount;
@@ -93,24 +113,6 @@ public class LastBiscuit {
         }
 
         System.out.println("Winner is player " + playerTurn);
-    }
-
-    public static int askIntegerQuestion(String question, Scanner in) {
-        int result = 0;
-
-        do {
-            System.out.printf("%s ", question);
-            if (!in.hasNextInt()) {
-                System.out.println("Please enter an integer");
-                in.nextLine();
-                continue;
-            }
-
-            result = in.nextInt();
-            break;
-        } while (result > 0);
-
-        return result;
     }
 
     public static int switchPlayer(int player) {
