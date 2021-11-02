@@ -32,7 +32,7 @@ public class LastBiscuit {
         boolean isBoth;
 
         // Game loop
-        while (barrelOne > 0 || barrelTwo > 0) {
+        while (barrelOne + barrelTwo > 0) {
             String selectedBarrel = "";
             while (isNotOption(selectedBarrel)) {
                 System.out.print("Choose a barrel: barrel1 (one), barrel2 (two), "
@@ -59,27 +59,19 @@ public class LastBiscuit {
             isBoth = selectedBarrel.equalsIgnoreCase("both");
 
             int biscuitAmount = 0;
-
-            boolean isNotNumber;
             boolean done = false;
 
             do {
-                isNotNumber = false;
                 System.out.print("How many biscuits are you taking? ");
 
-                while (!in.hasNextInt()) {
+                if (!in.hasNextInt()) {
                     System.out.println("Please enter an integer");
                     in.nextLine();
-                    isNotNumber = true;
-                    break;
+                    continue;
                 }
 
-                if (isNotNumber) {
-                    continue;
-                } else {
-                    biscuitAmount = in.nextInt();
-                    done = biscuitAmount > 0;
-                }
+                biscuitAmount = in.nextInt();
+                done = biscuitAmount > 0;
 
                 if ((isOne || isBoth) && barrelOne - biscuitAmount < 0) {
                     biscuitAmount = 0;
