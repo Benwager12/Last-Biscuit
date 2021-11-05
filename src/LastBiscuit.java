@@ -1,6 +1,12 @@
 import java.util.HashMap;
 import java.util.Scanner;
 
+/*
+Last Biscuit
+@author Ben Wager
+CS-110 Swansea University coursework
+*/
+
 public class LastBiscuit {
 
     public static void main(String[] args) {
@@ -20,10 +26,7 @@ public class LastBiscuit {
         int barrelOne = BARREL_ONE_START;
         int barrelTwo = BARREL_TWO_START;
 
-        /*
-        Hashmap of which players have their skip
-        If a player were to press skip it would change their value
-         */
+        //Hashmap of which players have their skip, will change to false per player if used
         HashMap<Integer, Boolean> hasSkip = new HashMap<>();
         hasSkip.put(1, true);
         hasSkip.put(2, true);
@@ -133,13 +136,10 @@ public class LastBiscuit {
             if (isOne || isBoth) {
                 barrelOne -= biscuitAmount;
             }
-
             // If you selected two or both, take away the biscuit amount from barrel one
             if (isTwo || isBoth) {
                 barrelTwo -= biscuitAmount;
             }
-
-            // If both is selected then both conditions will be satisfied
 
             // Print out the barrels
             System.out.printf(OUTPUT_BARRELS_STRING, barrelOne, barrelTwo);
