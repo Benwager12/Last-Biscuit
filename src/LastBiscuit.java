@@ -4,38 +4,41 @@ import java.util.Scanner;
 public class LastBiscuit {
 
     public static void main(String[] args) {
+        // Declaring final variables
         final String OUTPUT_BARRELS_STRING = "Biscuits Left - Barrel 1: %d%n"
                 + "Biscuits Left - Barrel 2: %d%n";
         final String PLAYER_TURN_STRING = "Player Turn: %d%n";
 
+        // Preparing to use scanner for inputs
         Scanner in = new Scanner(System.in);
 
-        final int SIX = 6;
-        final int EIGHT = 8;
+        // Magic numbers, in practice this would be put into a config file
+        final int BARREL_ONE_START = 6;
+        final int BARREL_TWO_START = 8;
 
-        int barrelOne = SIX;
-        int barrelTwo = EIGHT;
+        // Declaring each of the barrels with a predetermined value
+        int barrelOne = BARREL_ONE_START;
+        int barrelTwo = BARREL_TWO_START;
 
-        // Hashmap of which players have their skip
+        /*
+        Hashmap of which players have their skip
+        If a player were to press skip it would change their value
+         */
         HashMap<Integer, Boolean> hasSkip = new HashMap<>();
         hasSkip.put(1, true);
         hasSkip.put(2, true);
 
+        // Initializing player's turn, it starts on player one.
         int playerTurn = 1;
 
+        // Initially say the size of the barrels and the player's turn
         System.out.printf(OUTPUT_BARRELS_STRING, barrelOne, barrelTwo);
         System.out.printf(PLAYER_TURN_STRING, playerTurn);
-
-        // Variables will be redefined in the game in each turn
-        boolean isOne;
-        boolean isTwo;
-        boolean isBoth;
 
         /*
         Game loop - This is where the main chunk of code is.
         This runs continuously until both barrels have reached 0.
          */
-        final String BISCUITS_TAKING = "How many biscuits are you taking? ";
         while (barrelOne + barrelTwo > 0) {
             /*
             Until an option that is valid is chosen, keep asking the user for
@@ -48,6 +51,7 @@ public class LastBiscuit {
                 selectedBarrel = in.nextLine();
             }
 
+            // If the current player enters skip
             if (selectedBarrel.equalsIgnoreCase("skip")) {
                 if (hasSkip.get(playerTurn)) {
                     hasSkip.put(playerTurn, false);
@@ -60,9 +64,9 @@ public class LastBiscuit {
                 continue;
             }
 
-            isOne = selectedBarrel.equalsIgnoreCase("one");
-            isTwo = selectedBarrel.equalsIgnoreCase("two");
-            isBoth = selectedBarrel.equalsIgnoreCase("both");
+            boolean isOne = selectedBarrel.equalsIgnoreCase("one");
+            boolean isTwo = selectedBarrel.equalsIgnoreCase("two");
+            boolean isBoth = selectedBarrel.equalsIgnoreCase("both");
 
             int biscuitAmount = 0;
             int printType = 0;
@@ -70,7 +74,8 @@ public class LastBiscuit {
             boolean foundBiscuitAmount = false;
             do {
                 System.out.print(printType == 0
-                        ? BISCUITS_TAKING : "Please input an integer: ");
+                        ? "How many biscuits are you taking? "
+                        : "Please input an integer: ");
 
                 String strBiscuitAmount = in.nextLine();
                 if (!isNumeric(strBiscuitAmount)) {
