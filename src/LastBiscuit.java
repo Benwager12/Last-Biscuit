@@ -7,7 +7,6 @@ public class LastBiscuit {
         final String OUTPUT_BARRELS_STRING = "Biscuits Left - Barrel 1: %d%n"
                 + "Biscuits Left - Barrel 2: %d%n";
         final String PLAYER_TURN_STRING = "Player Turn: %d%n";
-        final String BISCUITS_TAKING = "How many biscuits are you taking? ";
 
         Scanner in = new Scanner(System.in);
 
@@ -32,14 +31,21 @@ public class LastBiscuit {
         boolean isTwo;
         boolean isBoth;
 
-        // Game loop
+        /*
+        Game loop - This is where the main chunk of code is.
+        This runs continuously until both barrels have reached 0.
+         */
+        final String BISCUITS_TAKING = "How many biscuits are you taking? ";
         while (barrelOne + barrelTwo > 0) {
+            /*
+            Until an option that is valid is chosen, keep asking the user for
+            a selected input until this happens.
+             */
             String selectedBarrel = "";
             while (isNotOption(selectedBarrel)) {
                 System.out.print("Choose a barrel: barrel1 (one), barrel2 (two), "
                             + "or both (both), or skip turn (skip)? ");
                 selectedBarrel = in.nextLine();
-
             }
 
             if (selectedBarrel.equalsIgnoreCase("skip")) {
@@ -54,19 +60,17 @@ public class LastBiscuit {
                 continue;
             }
 
-            isOne = selectedBarrel.equalsIgnoreCase("one")
-                    || selectedBarrel.equalsIgnoreCase("1");
-            isTwo = selectedBarrel.equalsIgnoreCase("two")
-                    || selectedBarrel.equalsIgnoreCase("2");
+            isOne = selectedBarrel.equalsIgnoreCase("one");
+            isTwo = selectedBarrel.equalsIgnoreCase("two");
             isBoth = selectedBarrel.equalsIgnoreCase("both");
 
             int biscuitAmount = 0;
-            boolean foundBiscuitAmount = false;
-
             int printType = 0;
+
+            boolean foundBiscuitAmount = false;
             do {
-                System.out.print(printType == 0 ?
-                        BISCUITS_TAKING : "Please input an integer: ");
+                System.out.print(printType == 0
+                        ? BISCUITS_TAKING : "Please input an integer: ");
 
                 String strBiscuitAmount = in.nextLine();
                 if (!isNumeric(strBiscuitAmount)) {
@@ -76,15 +80,20 @@ public class LastBiscuit {
 
                 biscuitAmount = Integer.parseInt(strBiscuitAmount);
 
-                foundBiscuitAmount = biscuitAmount > 0 && (!(((isOne || isBoth) && barrelOne - biscuitAmount < 0)
+                foundBiscuitAmount = biscuitAmount > 0
+                        && (!(((isOne || isBoth) && barrelOne - biscuitAmount < 0)
                         || ((isTwo || isBoth) && barrelTwo - biscuitAmount < 0)));
 
                 if (!foundBiscuitAmount) {
-                    printType = 0;
                     System.out.println("Sorry, that's not a legal number of "
                             + "biscuits for that/those barrel(s)");
+                    break;
                 }
             } while (!foundBiscuitAmount);
+
+            if (!foundBiscuitAmount) {
+                continue;
+            }
 
             if (isOne || isBoth) {
                 barrelOne -= biscuitAmount;
@@ -121,7 +130,7 @@ public class LastBiscuit {
     public static boolean isNumeric(String str) {
         boolean isFirst = true;
         for (char c : str.toCharArray()) {
-            if (!Character.isDigit(c) && (!(isFirst && str.equalsIgnoreCase("-")))) {
+            if (!(Character.isDigit(c) || (isFirst && Character.toString(c).equals("-")))) {
                 return false;
             }
             isFirst = false;
@@ -130,7 +139,7 @@ public class LastBiscuit {
     }
 
     public static boolean isNotOption(String selectedOption) {
-        String[] options = "one,two,both,skip,1,2".split(",");
+        String[] options = "one,two,both,skip".split(",");
 
         for (String op : options) {
             if (selectedOption.equalsIgnoreCase(op)) {
